@@ -163,53 +163,26 @@ volScalarField Qsource
     dimensionedScalar("small", dimensionSet(1,-1,-3,0,0,0,0), 0)
 );
 
-dimensionedScalar q("q", dimPower/dimLength/dimLength, laminarTransport);
-dimensionedScalar d("pipeDiameter", dimLength, laminarTransport);
-dimensionedScalar heaterLocation("heaterLocation", dimLength, laminarTransport);
-dimensionedScalar Q = constant::mathematical::pi*d*d/4*q;
+const dimensionedScalar q("q", dimPower/dimLength/dimLength, laminarTransport);
+const dimensionedScalar d("pipeDiameter", dimLength, laminarTransport);
+const dimensionedScalar heaterLocation("heaterLocation", dimLength, laminarTransport);
+const dimensionedScalar A = constant::mathematical::pi*d*d/4;
+const dimensionedScalar Q = A*q;
+const dimensionedScalar heaterWidth("hw", dimLength, 0.001);
+const dimensionedScalar V = A*heaterWidth;
 Info<< "\nApplied heat transfer rate Q = " << Q << endl;
+Info<< "\nVolume in experiment V = " << V << endl;
 
 forAll(Qsource, celli)
 {
 	scalar x = Qsource.mesh().C()[celli].component(vector::X);
 	if (x > heaterLocation.value())
+	//if (x >= heaterLead.value() && x <= heaterTrail.value())
 	{
-		Qsource[celli] = Q.value()/Qsource.mesh().V()[celli];
-		Info<< "Qsource = " << Qsource[celli] << ", V = " << Qsource.mesh().V()[celli] << endl;
+		Qsource[celli] = Q.value()/V.value();
+		Info<< "Qsource = " << Qsource[celli] << ", Vcelli = " << Qsource.mesh().V()[celli] << endl;
 		break;
 	}
 }
 
-//Info<< "Source term vector: " << Qsource << endl;
-
-//volScalarField DT
-//(
-//    IOobject
-//    (
-//        "DT",
-//        runTime.timeName(),
-//        mesh,
-//        IOobject::READ_IF_PRESENT,
-//        IOobject::AUTO_WRITE
-//    ),
-//    mesh,
-//    dimensionedScalar(dimViscosity, Zero)
-//);
-//
-//if (!DT.headerOk())
-//{
-//    IOdictionary transportProperties
-//    (
-//        IOobject
-//        (
-//            "transportProperties",
-//            runTime.constant(),
-//            mesh,
-//            IOobject::MUST_READ_IF_MODIFIED,
-//            IOobject::NO_WRITE
-//        )
-//    );
-//    DT = dimensionedScalar("DT", dimViscosity, transportProperties);
-//}
-
-#include "createFvOptions.H"
+//#include "createFvOptions.H"
