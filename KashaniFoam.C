@@ -120,12 +120,12 @@ int main(int argc, char *argv[])
               - fvm::laplacian(kHe, T) 
              ==
 			    Qsource
-			  + fvOptions(T)
+		//	  + fvOptions(T)
             );
 
-            fvOptions.constrain(TEqn);
+         //   fvOptions.constrain(TEqn);
             TEqn.solve();
-            fvOptions.correct(T);
+          //  fvOptions.correct(T);
         }
 
 		Info<< "min/max(T) = " << min(T).value() << ", "
