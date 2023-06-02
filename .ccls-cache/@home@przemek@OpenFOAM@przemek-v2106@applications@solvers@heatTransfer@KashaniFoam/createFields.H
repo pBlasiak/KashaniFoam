@@ -65,60 +65,6 @@ volScalarField rho
 	laminarTransport.rhoHe()
 );
 
-volScalarField rhon
-(
-    IOobject
-    (
-        "rhon",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::NO_WRITE
-    ),
-	rho
-);
-	rhon = laminarTransport.rhon();
-
-volScalarField rhos
-(
-    IOobject
-    (
-        "rhos",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::NO_WRITE
-    ),
-	rho
-);
-	rhos = rho - rhon;
-
-volScalarField sHe
-(
-    IOobject
-    (
-        "s",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::NO_WRITE
-    ),
-	laminarTransport.sHe()
-);
-
-volScalarField AGM
-(
-    IOobject
-    (
-        "AGM",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::NO_WRITE
-    ),
-	laminarTransport.AGMHe()
-);
-
 volScalarField cp
 (
     IOobject
@@ -222,7 +168,7 @@ const dimensionedScalar d("pipeDiameter", dimLength, laminarTransport);
 const dimensionedScalar heaterLocation("heaterLocation", dimLength, laminarTransport);
 const dimensionedScalar A = constant::mathematical::pi*d*d/4;
 const dimensionedScalar Q = A*q;
-// To work properly heaterWidth should be equal to the cell edge length in the x-direction
+//const dimensionedScalar heaterWidth("hw", dimLength, 0.001);
 const dimensionedScalar heaterWidth("hw", dimLength, laminarTransport);
 const dimensionedScalar V = A*heaterWidth;
 Info<< "\nApplied heat transfer rate Q = " << Q << endl;
@@ -234,33 +180,7 @@ forAll(Qsource, celli)
 	if (x > heaterLocation.value())
 	//if (x >= heaterLead.value() && x <= heaterTrail.value())
 	{
-		//Qsource[celli] = Q.value()/Qsource.mesh().V()[celli];
-		// points of the mesh
-		const pointField& meshPoints = mesh.points();
-		// list of points for each cell
-		const labelListList& cellPoints = mesh.cellPoints();
-
-		scalar minXcoord = meshPoints[cellPoints[celli].first()].x();
-		scalar maxXcoord = meshPoints[cellPoints[celli].first()].x();
-		for (auto pi : cellPoints[celli])
-		{
-			if (meshPoints[pi].x() < minXcoord)
-			{
-				minXcoord = meshPoints[pi].x();
-			}
-			if (meshPoints[pi].x() > maxXcoord)
-			{
-				maxXcoord = meshPoints[pi].x();
-			}
-		}
-		scalar heaterWidthMesh = maxXcoord - minXcoord;
-		Info<< "heaterWidthMesh = " << heaterWidthMesh << endl;
-
-		// Volume calculated
-		scalar VV = (maxXcoord - minXcoord)*A.value();
-
-		Qsource[celli] = Q.value()/VV;
-		//Qsource[celli] = Q.value()/V.value();
+		Qsource[celli] = Q.value()/V.value();
 		Info<< "Qsource = " << Qsource[celli] << ", Vcelli = " << Qsource.mesh().V()[celli] << endl;
 		break;
 	}
