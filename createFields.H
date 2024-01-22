@@ -27,30 +27,31 @@ volScalarField T
 );
 
 #include "createPhi.H"
+
 singlePhaseHeliumTransportModel laminarTransport(U, phi);
 
 laminarTransport.correct();
 
-//- Helium thermal conductivity models enumerations
-//  kHe = (1/(f|gradT|^2))^(1/3)
-enum class HeliumThermalConductivityModel
-{
-	Hepak,
-	Kitamura,
-	Suekane
-};
-
-static const Enum<HeliumThermalConductivityModel> HeliumThermalConductivityModelNames_
-{
-    { HeliumThermalConductivityModel::Hepak, "Hepak" },
-    { HeliumThermalConductivityModel::Kitamura, "Kitamura" },
-    { HeliumThermalConductivityModel::Suekane, "Suekane" },
-};
-
-HeliumThermalConductivityModel kHeModel
-(
-	HeliumThermalConductivityModelNames_.get("kHeModel", laminarTransport)
-);
+////- Helium thermal conductivity models enumerations
+////  kHe = (1/(f|gradT|^2))^(1/3)
+//enum class HeliumThermalConductivityModel
+//{
+//	Hepak,
+//	Kitamura,
+//	Suekane
+//};
+//
+//static const Enum<HeliumThermalConductivityModel> HeliumThermalConductivityModelNames_
+//{
+//    { HeliumThermalConductivityModel::Hepak, "Hepak" },
+//    { HeliumThermalConductivityModel::Kitamura, "Kitamura" },
+//    { HeliumThermalConductivityModel::Suekane, "Suekane" },
+//};
+//
+//HeliumThermalConductivityModel kHeModel
+//(
+//	HeliumThermalConductivityModelNames_.get("kHeModel", laminarTransport)
+//);
 
 volScalarField rho
 (
@@ -203,67 +204,5 @@ volScalarField magGradT2
     dimensionedScalar("small", dimensionSet(0,-2,0,2,0,0,0), SMALL)
 );
 
-volScalarField Qsource
-(
-    IOobject
-    (
-        "Qsource",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-	mesh,
-    dimensionedScalar("small", dimensionSet(1,-1,-3,0,0,0,0), 0)
-);
-
-const dimensionedScalar q("q", dimPower/dimLength/dimLength, laminarTransport);
-const dimensionedScalar d("pipeDiameter", dimLength, laminarTransport);
-const dimensionedScalar heaterLocation("heaterLocation", dimLength, laminarTransport);
-const dimensionedScalar A = constant::mathematical::pi*d*d/4;
-const dimensionedScalar Q = A*q;
-// To work properly heaterWidth should be equal to the cell edge length in the x-direction
-const dimensionedScalar heaterWidth("hw", dimLength, laminarTransport);
-const dimensionedScalar V = A*heaterWidth;
-Info<< "\nApplied heat transfer rate Q = " << Q << endl;
-Info<< "\nVolume in experiment V = " << V << endl;
-
-forAll(Qsource, celli)
-{
-	scalar x = Qsource.mesh().C()[celli].component(vector::X);
-	if (x > heaterLocation.value())
-	//if (x >= heaterLead.value() && x <= heaterTrail.value())
-	{
-		//Qsource[celli] = Q.value()/Qsource.mesh().V()[celli];
-		// points of the mesh
-		const pointField& meshPoints = mesh.points();
-		// list of points for each cell
-		const labelListList& cellPoints = mesh.cellPoints();
-
-		scalar minXcoord = meshPoints[cellPoints[celli].first()].x();
-		scalar maxXcoord = meshPoints[cellPoints[celli].first()].x();
-		for (auto pi : cellPoints[celli])
-		{
-			if (meshPoints[pi].x() < minXcoord)
-			{
-				minXcoord = meshPoints[pi].x();
-			}
-			if (meshPoints[pi].x() > maxXcoord)
-			{
-				maxXcoord = meshPoints[pi].x();
-			}
-		}
-		scalar heaterWidthMesh = maxXcoord - minXcoord;
-		Info<< "heaterWidthMesh = " << heaterWidthMesh << endl;
-
-		// Volume calculated
-		scalar VV = (maxXcoord - minXcoord)*A.value();
-
-		Qsource[celli] = Q.value()/VV;
-		//Qsource[celli] = Q.value()/V.value();
-		Info<< "Qsource = " << Qsource[celli] << ", Vcelli = " << Qsource.mesh().V()[celli] << endl;
-		break;
-	}
-}
 
 #include "createFvOptions.H"

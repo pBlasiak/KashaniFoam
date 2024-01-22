@@ -1,4 +1,5 @@
 EXE_INC = \
+	-I../buoyantBoussinesqSuperFluidNewPimpleFoam \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(WM_PROJECT_USER_DIR)/src/transportModels/incompressible/singlePhaseHeliumTransportModel \
     -I$(WM_PROJECT_USER_DIR)/src/transportModels/incompressible/lnInclude \
