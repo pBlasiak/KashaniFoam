@@ -32,27 +32,6 @@ singlePhaseHeliumTransportModel laminarTransport(U, phi);
 
 laminarTransport.correct();
 
-////- Helium thermal conductivity models enumerations
-////  kHe = (1/(f|gradT|^2))^(1/3)
-//enum class HeliumThermalConductivityModel
-//{
-//	Hepak,
-//	Kitamura,
-//	Suekane
-//};
-//
-//static const Enum<HeliumThermalConductivityModel> HeliumThermalConductivityModelNames_
-//{
-//    { HeliumThermalConductivityModel::Hepak, "Hepak" },
-//    { HeliumThermalConductivityModel::Kitamura, "Kitamura" },
-//    { HeliumThermalConductivityModel::Suekane, "Suekane" },
-//};
-//
-//HeliumThermalConductivityModel kHeModel
-//(
-//	HeliumThermalConductivityModelNames_.get("kHeModel", laminarTransport)
-//);
-
 volScalarField rho
 (
     IOobject
