@@ -55,25 +55,22 @@ TODO: poprawic rownanie
     \endplaintable
 
 References
-@article{doi:10.1080/10407788908944714,
-author = { A.   Kashani  and  S. W.   Van Sciver  and  J. C.   Strikwerda },
-title = {NUMERICAL SOLUTION OF FORCED CONVECTION HEAT TRANSFER IN He II},
-journal = {Numerical Heat Transfer, Part A: Applications},
-volume = {16},
-number = {2},
-pages = {213-228},
-year  = {1989},
-publisher = {Taylor & Francis},
-doi = {10.1080/10407788908944714},
+@Inbook{Kashani1986,
+author="Kashani, A.
+and Van Sciver, S. W.",
+editor="Fast, R. W.",
+title="Steady State Forced Convection Heat Transfer in He II",
+bookTitle="Advances in Cryogenic Engineering: Volume 31",
+year="1986",
+publisher="Springer US",
+address="Boston, MA",
+pages="489--498",
+abstract="A study of forced convection heat transfer in superfluid helium (He II) is initiated to better understand the physical behavior of this process and to compare it with the more familiar He II heat transfer mechanism of internal convection. An experimental assembly is designed to achieve fluid flow by a motor-driven hydraulic pump which utilizes two stainless steel bellows. Each bellows is connected to one end of a copper tube, 3 mm in diameter and 2 m long. The system allows measurements of one dimensional heat and mass transfer where the measured quantities include: temperature profile and pressure drop. The variable quantities are the helium bath temperature, flow velocity and heat input. The helium bath is held at 1.8 K and under saturation pressure. The flow tube is heated at the middle and the flow velocity is varied up to 97 cm/s. The helium pressure is monitored at both ends of the tube and a friction factor is estimated for He II. Temperature measurements are made at seven evenly spaced locations along the tube. The experimental temperature profile is compared with a numerical solution of an analytical model developed for the problem under study.",
+isbn="978-1-4613-2213-9",
+doi="10.1007/978-1-4613-2213-9_56",
+url="https://doi.org/10.1007/978-1-4613-2213-9_56"
+}
 
-URL = { 
-        https://doi.org/10.1080/10407788908944714
-    
-},
-eprint = { 
-        https://doi.org/10.1080/10407788908944714
-}
-}
 
 \*---------------------------------------------------------------------------*/
 
